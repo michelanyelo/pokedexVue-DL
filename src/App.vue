@@ -1,11 +1,11 @@
 <script setup>
-import PokeCard from './components/PokeCard.vue'
+import PokeComp from './components/PokeComp.vue'
 
 </script>
 
 <template>
   <h1>Pokemones</h1>
-  <PokeCard />
+  <PokeComp />
 </template>
 
 <style scoped></style>

@@ -1,15 +1,13 @@
 <template>
-    <div id="pokeContainer" class="container">
-        <div class="row">
-            <div class="col mb-4" v-for="(pokemon, idx) in pokemons" :key="idx">
-                <div class="card align-items-center" style="width: 18rem;">
-                    <img :src="pokemon.imagen" class="card-img-top w-50"
-                        :class="!pokemon.adivinado ? 'camuflado' : 'visible'" :alt="pokemon.nombre">
-                    <div class="card-body">
-                        <h5 class="card-title text-center" v-if="pokemon.adivinado">{{ pokemon.nombre }}</h5>
-                        <input type="text" class="w-100 mb-2">
-                        <button class="btn btn-dark w-100">Descubrir</button>
-                    </div>
+    <div class="col mb-4">
+        <div class="card align-items-center" style="width: 18rem;">
+            <img :src="pokemon.imagen" class="card-img-top w-50" :class="!adivinado ? 'camuflado' : 'visible'"
+                :alt="pokemon.nombre">
+            <div class="card-body">
+                <h5 class="card-title text-center" v-if="adivinado">{{ pokemon.nombre }}</h5>
+                <div :class="!adivinado ? 'visible' : 'oculto'">
+                    <input v-model="inputValue" @keydown.enter.prevent="verificarNombre" type="text" class="w-100 mb-2">
+                    <button @click="verificarNombre" class="btn btn-dark w-100">Descubrir</button>
                 </div>
             </div>
         </div>
@@ -17,30 +15,34 @@
 </template>
 
 <script>
-import PokeApi from '../services/PokeApi.js'
 export default {
-    name: 'PokeComp',
+    name: 'PokeCard',
+    props: {
+        pokemon: Object,
+    },
     data() {
         return {
-            pokemons: [],
+            inputValue: '',
+            adivinado: false,
         }
     },
-    async mounted() {
-        await this.getData();
-    },
     methods: {
-        async getData() {
-            const pokeData = new PokeApi();
-            const pokemonList = await pokeData.mapearPorId()
-            this.pokemons = pokemonList
-        },
+        verificarNombre() {
+            if (this.inputValue.toLowerCase().trim() === this.pokemon.nombre.toLowerCase().trim()) {
+                this.adivinado = true
+                this.$emit('adivinado', this.pokemon.nombre)
+            } else {
+                alert('Nombre incorrecto, intenta de nuevo')
+            }
+            this.inputValue = ''
+        }
     }
-
-};
+}
 </script>
+
 <style scoped>
 .camuflado {
-    filter: blur(5px) grayscale(100%)
+    filter: blur(5px) grayscale(100%);
 }
 
 .oculto {
