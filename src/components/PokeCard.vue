@@ -28,12 +28,9 @@ export default {
     },
     methods: {
         verificarNombre() {
-            if (this.inputValue.toLowerCase().trim() === this.pokemon.nombre.toLowerCase().trim()) {
-                this.adivinado = true
-                this.$emit('adivinado', this.pokemon.nombre)
-            } else {
-                alert('Nombre incorrecto, intenta de nuevo')
-            }
+            const esCorrecto = this.inputValue.toLowerCase().trim() === this.pokemon.nombre.toLowerCase().trim();
+            this.adivinado = esCorrecto
+            this.$emit('adivinado', { nombre: this.pokemon.nombre, correcto: esCorrecto });
             this.inputValue = ''
         }
     }
