@@ -8,57 +8,21 @@
         <div class="row mt-4">
             <PokeCard v-for="(pokemon, idx) in pokemons" :key="idx" :pokemon="pokemon" @adivinado="manejarAdivinanza" />
         </div>
-
-        <!-- Modal de éxito -->
-        <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="successModalLabel">¡Felicidades!</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <img src="https://i.redd.it/0xsc6c6oovu81.jpg" alt="Pikachu feliz" class="img-fluid">
-                        <p>¡Has adivinado el Pokémon!</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal de error -->
-        <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="errorModalLabel">¡Oh no!</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <img src="https://i.pinimg.com/236x/40/76/8e/40768e50330180d9249bf3921def7c24.jpg"
-                            alt="Pikachu sorprendido" class="img-fluid">
-                        <p>¡Inténtalo de nuevo!</p>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <ModalComp />
     </div>
 </template>
 
 <script>
 import PokeApi from '../services/PokeApi.js'
 import PokeCard from './PokeCard.vue'
+import ModalComp from './ModalComp.vue'
 import { Modal } from 'bootstrap'
 
 export default {
     name: 'PokeComp',
     components: {
         PokeCard,
+        ModalComp
     },
     data() {
         return {
@@ -97,13 +61,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.camuflado {
-    filter: blur(5px) grayscale(100%);
-}
-
-.visible {
-    display: block;
-    filter: none;
-}
-</style>
+<style scoped></style>
