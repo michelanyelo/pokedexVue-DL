@@ -23,7 +23,6 @@ class PokeApi {
         if (this.data.value) {
             const mapPokemon = await Promise.all(this.data.value.map(async (pokemon) => {
                 try {
-                    // solicitud a la URL de cada pokemon para obtener sus detalles
                     const { data } = await axios.get(pokemon.url)
                     return {
                         nombre: pokemon.name,
