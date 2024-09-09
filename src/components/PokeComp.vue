@@ -1,9 +1,11 @@
 <template>
     <div id="pokeContainer" class="container">
-        <div class="mt-3">
-            <h3>Pokémon adivinados: {{ adivinadosCount }}</h3>
+        <div class="mt-3 d-flex flex-column align-items-center">
+            <img src="/pokedex.svg" alt="" class="img-fluid w-25">
+            <h1>¿Quién es ese Pokemon?</h1>
+            <h3>Pokémon descubiertos: <span class="text-warning fw-bold">{{ adivinadosCount }}</span></h3>
         </div>
-        <div class="row">
+        <div class="row mt-4">
             <PokeCard v-for="(pokemon, idx) in pokemons" :key="idx" :pokemon="pokemon" @adivinado="manejarAdivinanza" />
         </div>
     </div>
