@@ -1,9 +1,16 @@
 <template>
-    <div id="pokeContainer">
+    <div id="pokeContainer" class="container">
         <div class="row">
-            <div v-for="(pokemon, idx) in pokemons" :key="idx">
-                <h1>{{ pokemon.nombre }}</h1>
-                <img :src="pokemon.imagen" alt="">
+            <div class="col mb-4" v-for="(pokemon, idx) in pokemons" :key="idx">
+                <div class="card align-items-center" style="width: 18rem;">
+                    <img :src="pokemon.imagen" class="card-img-top w-50"
+                        :class="!pokemon.adivinado ? 'camuflado' : 'visible'" :alt="pokemon.nombre">
+                    <div class="card-body">
+                        <h5 class="card-title text-center" v-if="pokemon.adivinado">{{ pokemon.nombre }}</h5>
+                        <input type="text" class="w-100 mb-2">
+                        <button class="btn btn-dark w-100">Descubrir</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -15,7 +22,7 @@ export default {
     name: 'PokeComp',
     data() {
         return {
-            pokemons: []
+            pokemons: [],
         }
     },
     async mounted() {
@@ -26,9 +33,22 @@ export default {
             const pokeData = new PokeApi();
             const pokemonList = await pokeData.mapearPorId()
             this.pokemons = pokemonList
-        }
+        },
     }
 
 };
 </script>
-<style scoped></style>
+<style scoped>
+.camuflado {
+    filter: blur(5px) grayscale(100%)
+}
+
+.oculto {
+    display: none;
+}
+
+.visible {
+    display: block;
+    filter: none;
+}
+</style>

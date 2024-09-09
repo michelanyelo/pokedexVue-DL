@@ -26,7 +26,8 @@ class PokeApi {
                     const { data } = await axios.get(pokemon.url)
                     return {
                         nombre: pokemon.name,
-                        imagen: data.sprites.front_default
+                        imagen: data.sprites.front_default,
+                        adivinado: false
                     }
                 } catch (error) {
                     console.error(`Error al obtener datos del pokemon ${pokemon.name}:`, error)
