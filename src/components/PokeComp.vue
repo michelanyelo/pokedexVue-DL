@@ -1,21 +1,31 @@
 <template>
     <div class="container">
-        <!-- Contenedor principal con alineación y estilos -->
+        <!-- Encabezado y contadores -->
         <div class="mt-3 d-flex flex-column align-items-center">
             <!-- Imagen de la Pokédex -->
-            <img src="/pokedex.svg" alt="" class="img-fluid w-25">
-            <!-- Título principal -->
-            <h1>¿Quién es ese Pokemon?</h1>
+            <img src="/pokedex.svg" alt="Pokédex" class="img-fluid w-25">
+            <!-- Título del juego -->
+            <h1>¿Quién es ese Pokémon?</h1>
             <!-- Contador de Pokémon descubiertos -->
-            <h3>Pokémon descubiertos: <span class="text-warning fw-bold">{{ adivinadosCount }}</span></h3>
+            <h3>
+                Pokémon descubiertos:
+                <span class="text-warning fw-bold">{{ adivinadosCount }}</span>
+            </h3>
         </div>
+
         <!-- Fila de tarjetas de Pokémon -->
         <div class="row mt-4">
-            <!-- Componente PokeCard para cada Pokémon en la lista -->
-            <PokeCard v-for="(pokemon, idx) in pokemons" :key="idx" :pokemon="pokemon" @adivinado="manejarAdivinanza" />
+            <!-- Componente para mostrar cada tarjeta de Pokémon -->
+            <PokeCard v-for="pokemon in pokemons" :key="pokemon.id" :pokemon="pokemon" @adivinado="manejarAdivinanza" />
         </div>
-        <!-- Componente de modales -->
-        <ModalComp />
+
+        <!-- Modales para éxito y error -->
+        <ModalComp modalId="successModal" title="¡Felicidades!" message="¡Has adivinado el Pokémon!"
+            imageSrc="https://i.pinimg.com/236x/40/76/8e/40768e50330180d9249bf3921def7c24.jpg"
+            headerClass="bg-success text-white" footerButtonClass="btn btn-success" />
+        <ModalComp modalId="errorModal" title="¡Oh no!" message="¡Inténtalo de nuevo!"
+            imageSrc="https://i.pinimg.com/474x/46/bc/f7/46bcf71aaa097cca204f5dbe50240186.jpg"
+            headerClass="bg-danger text-white" footerButtonClass="btn btn-danger" />
     </div>
 </template>
 
@@ -28,35 +38,34 @@ import { Modal } from 'bootstrap'
 export default {
     name: 'PokeComp',
     components: {
-        PokeCard,    // Componente para mostrar la tarjeta de Pokémon
-        ModalComp    // Componente para manejar los modales de éxito y error
+        PokeCard,    // Componente para las tarjetas de Pokémon
+        ModalComp    // Componente para los modales
     },
     data() {
         return {
-            pokemons: [],    // Lista de Pokémon que se mostrarán
+            pokemons: [],    // Lista de Pokémon
             currentPokemon: null    // Pokémon actualmente adivinado
         }
     },
     async mounted() {
-        await this.getData()    // Obtiene los datos de Pokémon al montar el componente
+        // Obtiene los datos de Pokémon al montar el componente
+        await this.getData()
     },
     methods: {
         async getData() {
-            // Crea una instancia de PokeApi y obtiene la lista de Pokémon
+            // Obtiene la lista de Pokémon desde la API
             const pokeData = new PokeApi()
             const pokemonList = await pokeData.mapearPorId()
-            this.pokemons = pokemonList    // Asigna la lista de Pokémon al estado
+            this.pokemons = pokemonList
         },
         manejarAdivinanza({ nombre, correcto }) {
-            // Muestra el modal de éxito o error basado en si la adivinanza fue correcta
-            if (correcto) {
-                const successModal = new Modal(document.getElementById('successModal'))
-                successModal.show()
-            } else {
-                const errorModal = new Modal(document.getElementById('errorModal'))
-                errorModal.show()
-            }
-            // Actualiza el estado del Pokémon según si fue adivinado correctamente
+            // Muestra el modal correspondiente basado en la adivinanza
+            const modalId = correcto ? 'successModal' : 'errorModal'
+            const modalElement = document.getElementById(modalId)
+            const modalInstance = new Modal(modalElement)
+            modalInstance.show()
+
+            // Actualiza el estado del Pokémon
             const pokemon = this.pokemons.find(pokemon => pokemon.nombre === nombre)
             if (pokemon) {
                 pokemon.adivinado = correcto
@@ -72,6 +81,4 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Estilos específicos para el componente si se requieren */
-</style>
+<style scoped></style>

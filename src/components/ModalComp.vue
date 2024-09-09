@@ -1,39 +1,21 @@
 <template>
-    <!-- Modal de éxito -->
-    <div class="modal fade" id="successModal" tabindex="-1" aria-labelledby="successModalLabel" aria-hidden="true">
+    <!-- Modal general con clases dinámicas -->
+    <div class="modal fade" :id="modalId" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-success text-white">
-                    <h5 class="modal-title" id="successModalLabel">¡Felicidades!</h5>
+                <!-- Encabezado del modal con color dinámico -->
+                <div class="modal-header" :class="headerClass">
+                    <h5 class="modal-title" :id="modalLabel">{{ title }}</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <!-- Cuerpo del modal con mensaje y imagen -->
                 <div class="modal-body text-center">
-                    <img src="https://i.pinimg.com/236x/40/76/8e/40768e50330180d9249bf3921def7c24.jpg"
-                        alt="Pikachu sorprendido" class="img-fluid rounded-circle">
-                    <p class="mt-3 fw-bold fs-5">¡Has adivinado el Pokémon!</p>
+                    <img :src="imageSrc" alt="Modal Image" class="img-fluid rounded-circle">
+                    <p class="mt-3 fw-bold fs-5">{{ message }}</p>
                 </div>
+                <!-- Pie del modal -->
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal">Cerrar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal de error -->
-    <div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title" id="errorModalLabel">¡Oh no!</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img src="https://i.pinimg.com/474x/46/bc/f7/46bcf71aaa097cca204f5dbe50240186.jpg"
-                        alt="Pikachu durmiendo" class="img-fluid rounded-circle">
-                    <p class="mt-3 fw-bold fs-5">¡Inténtalo de nuevo!</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" :class="footerButtonClass" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -43,6 +25,16 @@
 <script>
 export default {
     name: 'ModalComp',
+    props: {
+        modalId: String,
+        title: String,
+        message: String,
+        imageSrc: String,
+        headerClass: String,
+        footerButtonClass: String,
+        modalLabel: String
+    }
 }
 </script>
+
 <style scoped></style>
