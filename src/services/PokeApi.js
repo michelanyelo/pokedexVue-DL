@@ -1,47 +1,36 @@
-import axios from "axios"
-import { ref } from "vue"
+import { ref } from 'vue'
+import axios from 'axios'
 
-class PokeApi {
-    constructor() {
-        this.baseURL = 'https://pokeapi.co/api/v2/pokemon'
-        this.data = ref(null)
-    }
+export function usePokeApi() {
+    const baseURL = 'https://pokeapi.co/api/v2/pokemon'
+    const listado = ref([])
 
-    async setData() {
+    // Función para obtener los datos de los Pokémon
+    const consultaAPI = async () => {
         try {
-            const url = this.baseURL
-            const { data } = await axios.get(url)
-            this.data.value = data.results
-        } catch (error) {
-            console.error(error)
-        }
-    }
-
-    async mapearPorId() {
-        await this.setData()
-
-        if (this.data.value) {
-            const mapPokemon = await Promise.all(this.data.value.map(async (pokemon) => {
+            const { data } = await axios.get(baseURL)
+            const mapPokemon = await Promise.all(data.results.map(async (pokemon) => {
                 try {
-                    const { data } = await axios.get(pokemon.url)
+                    const response = await axios.get(pokemon.url)
                     return {
                         nombre: pokemon.name,
-                        imagen: data.sprites.front_default,
+                        imagen: response.data.sprites.front_default,
                         adivinado: false
                     }
-                } catch (error) {
-                    console.error(`Error al obtener datos del pokemon ${pokemon.name}:`, error)
+                } catch (err) {
+                    console.error(`Error al obtener datos del pokemon ${pokemon.name}:`, err)
                     return null
                 }
             }))
-            return mapPokemon
-        } else {
-            console.log('No se encontraron datos.')
-            return []
+            listado.value = mapPokemon.filter(Boolean)
+        } catch (err) {
+            console.error('Error al consultar la API:', err)
         }
     }
 
-
+    // Variables reactivas y la función de consulta
+    return {
+        consultaAPI,
+        listado      
+    }
 }
-
-export default PokeApi
